@@ -1,11 +1,13 @@
 package com.example.springrestcrud.controllers;
 
 import com.example.springrestcrud.entity.Student;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.springrestcrud.errors.StudentErrorResponse;
+import com.example.springrestcrud.errors.StudentNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,30 @@ public class StudentController
     @GetMapping("/students/{studentId}")
     public Student getStudentById(@PathVariable(name = "studentId") int id)
     {
+        if(id >= students.size() || id < 0)
+        {
+            throw new StudentNotFoundException("Couldn't find student with id: " + id);
+        }
         return students.get(id);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exception)
+    {
+        StudentErrorResponse errorResponse = new StudentErrorResponse();
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setTimestamp(LocalTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<StudentErrorResponse> handleException(Exception exception)
+    {
+        StudentErrorResponse errorResponse = new StudentErrorResponse();
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setMessage(exception.getMessage());
+        errorResponse.setTimestamp(LocalTime.now());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 }
