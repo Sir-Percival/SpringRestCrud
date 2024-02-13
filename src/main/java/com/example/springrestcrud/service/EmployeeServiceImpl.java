@@ -1,42 +1,39 @@
 package com.example.springrestcrud.service;
 
-import com.example.springrestcrud.dao.EmployeeDAO;
 import com.example.springrestcrud.entity.Employee;
+import com.example.springrestcrud.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService
 {
-    private final EmployeeDAO employeeDAO;
+    private final EmployeeRepository employeeRepository;
 
     @Autowired
-    public EmployeeServiceImpl(EmployeeDAO employeeDAO) {
-        this.employeeDAO = employeeDAO;
+    public EmployeeServiceImpl(EmployeeRepository employeeDAO) {
+        this.employeeRepository = employeeDAO;
     }
 
     @Override
     public List<Employee> findAll() {
-        return employeeDAO.findAll();
+        return employeeRepository.findAll();
     }
 
     @Override
     public Employee findById(int id) {
-        return employeeDAO.findById(id);
+        return employeeRepository.findById(id).orElseThrow(() -> new RuntimeException("Couldn't find employee with id: " + id));
     }
 
-    @Transactional
     @Override
     public Employee save(Employee employee) {
-        return employeeDAO.save(employee);
+        return employeeRepository.save(employee);
     }
 
-    @Transactional
     @Override
     public void deleteById(int id) {
-        employeeDAO.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 }
