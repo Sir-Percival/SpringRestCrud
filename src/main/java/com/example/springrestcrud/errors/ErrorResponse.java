@@ -2,15 +2,15 @@ package com.example.springrestcrud.errors;
 
 import java.time.LocalTime;
 
-public class StudentErrorResponse {
+public class ErrorResponse {
     private int status;
     private String message;
     private LocalTime timestamp;
 
-    public StudentErrorResponse() {
+    public ErrorResponse() {
     }
 
-    public StudentErrorResponse(int status, String message, LocalTime timestamp) {
+    public ErrorResponse(int status, String message, LocalTime timestamp) {
         this.status = status;
         this.message = message;
         this.timestamp = timestamp;

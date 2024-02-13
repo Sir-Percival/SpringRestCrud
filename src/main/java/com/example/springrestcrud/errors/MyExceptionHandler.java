@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.time.LocalTime;
 
 @ControllerAdvice
-public class StudentExceptionHandler {
+public class MyExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<StudentErrorResponse> handleException(StudentNotFoundException exception)
+    public ResponseEntity<ErrorResponse> handleException(StudentNotFoundException exception)
     {
-        StudentErrorResponse errorResponse = new StudentErrorResponse();
+        ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setMessage(exception.getMessage());
         errorResponse.setTimestamp(LocalTime.now());
@@ -20,9 +20,9 @@ public class StudentExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<StudentErrorResponse> handleException(Exception exception)
+    public ResponseEntity<ErrorResponse> handleException(Exception exception)
     {
-        StudentErrorResponse errorResponse = new StudentErrorResponse();
+        ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setMessage(exception.getMessage());
         errorResponse.setTimestamp(LocalTime.now());
